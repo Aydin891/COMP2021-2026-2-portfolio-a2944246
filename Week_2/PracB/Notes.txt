@@ -1,0 +1,10 @@
+Task 4: Reflection and Commit
+
+1.What does encapsulation achieve in C#?
+Helps to keep the data and the methods that use the data inside their class and protects the data.
+
+2.Why are access modifiers important?
+they are important because they control the parts in the class that could be accessed from another classes code.
+
+3.How would you explain method overloading to a Python programmer?
+Means having few methods with the same name but different parameter types.
