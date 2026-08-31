@@ -1,2 +1,8 @@
 Task 2:
 the reason is because both of the classes inherit from the Emloyee class.
+
+Task 4:
+Q1. It lets child classes to be treated like the parent class type and also
+still using their own different overriden methods.
+
+Q2. It quiet similar to Python because different objects can use the same name method.
