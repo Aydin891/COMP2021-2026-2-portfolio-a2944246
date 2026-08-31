@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MyApp
 {
@@ -55,8 +56,33 @@ namespace MyApp
 
         static void Main(string[] args)
         {
+
             FullTimeEmployee employee1 = new FullTimeEmployee{Name = "Arthur", AnnualSalary = 48000m};
             Contractor contractor1 = new Contractor{Name ="John", Rate = 50m, Hours = 20m};
+
+            FullTimeEmployee employee2 = new FullTimeEmployee{Name = "Max", AnnualSalary = 4000m};
+            Contractor contractor2 = new Contractor{Name ="James", Rate = 10m, Hours = 30m};
+
+
+            FullTimeEmployee employee3 = new FullTimeEmployee{Name = "Allen", AnnualSalary = 50000m};
+            Contractor contractor3 = new Contractor{Name ="Bruce", Rate = 20m, Hours = 60m};
+            List<Employee> employee = new List<Employee>
+            {
+                employee1, 
+                employee2,
+                employee3,
+                contractor1,
+                contractor2, 
+                contractor3,
+            };
+
+            foreach(Employee emloyee in employee)
+            {
+
+                Console.WriteLine($"{emloyee.Name}: Pay {emloyee.CalculatePay()}");
+            }
+
+
             
             employee1.GenerateReport();
 

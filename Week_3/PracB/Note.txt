@@ -1,0 +1,2 @@
+Task 2:
+the reason is because both of the classes inherit from the Emloyee class.
