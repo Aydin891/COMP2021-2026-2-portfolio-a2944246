@@ -1,0 +1,14 @@
+Q1. The value that was incorrect was the one affected by the wrong Substring() index.
+
+Q2. The code was relying on the symbol list values which were maching the items list values. 
+if the input was read incorrectly then the symbol indec could  have been wrong.
+
+Q3.The debugger allowed me to see the varible such as i, items and the text that been passed to int.Parse().
+Which showed the program was reading the wrong inputs.
+
+Q4.
+   1. fixed the namespace so it matched the folder structure
+   2. changed the program class accessibility
+   3.removed unnecessary code
+
+Q5. 
