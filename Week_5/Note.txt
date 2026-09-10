@@ -1,0 +1,9 @@
+Task 1 Reflection Questions:
+    1. These are different because a linked list stores the values in the seprated nodes 
+        which are connected to eachother using refrences to their next and pervious nodes 
+        where as a list stores the values where they could be accessed directly.
+    
+    2. so the LinkedList needs the values to be added as nodes using methods.
+
+    3. Because LinkedList does not use indexes so the program needs to start from the first nodes
+        and Next to reach the node.
