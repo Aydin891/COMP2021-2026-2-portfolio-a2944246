@@ -39,6 +39,27 @@ public sealed class RecipeManagerTests
         Assert.Equal(new[] { 20 }, manager.GetCookingPlan());
     }
 
+    [Fact]
+    public void AddIngredientsToShoppingList_AddsOngridients()
+    {
+        var manager = CreateManager();
+        int added = manager.AddIngredientsToShoppingList(10);
+
+        Assert.Equal(1, added);
+        Assert.Equal(new[] {"1 apple"}, manager.GetShoppingList());
+    }
+
+    [Fact]
+    public void ClearShoppingList_Test()
+    {
+        var manager = CreateManager();
+
+        manager.AddIngredientsToShoppingList(10);
+        manager.ClearShoppingList();
+
+        Assert.Empty(manager.GetShoppingList());
+    }
+
     private static RecipeManager CreateManager()
     {
         return new RecipeManager(new[]

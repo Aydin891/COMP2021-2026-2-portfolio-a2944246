@@ -52,7 +52,6 @@ public sealed class RecipeManager : IRecipeManager
             }
 
             recipes.Add(recipe.Id, recipe);
-
             return true;
 
         }
@@ -85,14 +84,30 @@ public sealed class RecipeManager : IRecipeManager
 
     public int AddIngredientsToShoppingList(int recipeId)
     {
-        
+        Recipe? recipe = FindRecipe(recipeId);
+
+        if (recipe == null)
+        {
+            return 0;
+        }
+
+        foreach (string ingredient in recipe.Ingredients)
+        {
+            shoppingList.Add(ingredient);
+        }
+
+        return recipe.Ingredients.Count;
     }
 
-    public IReadOnlyList<string> GetShoppingList() =>
-        throw new NotImplementedException("Part A: implement GetShoppingList.");
+    public IReadOnlyList<string> GetShoppingList()
+    {
+        return shoppingList;
+    }
 
-    public void ClearShoppingList() =>
-        throw new NotImplementedException("Part A: implement ClearShoppingList.");
+    public void ClearShoppingList()
+    {
+        shoppingList.Clear();
+    }
 
     public bool AddRecipeToCookingPlan(int recipeId) =>
         throw new NotImplementedException("Part A: implement AddRecipeToCookingPlan.");
