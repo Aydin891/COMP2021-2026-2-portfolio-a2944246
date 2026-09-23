@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace RecipeManagement.Core;
 
@@ -13,6 +15,9 @@ public sealed class RecipeManager : IRecipeManager
     // TODO Part A: add your private collection fields here.
     private Dictionary<int, Recipe> recipes = new();
     private List<String> shoppingList = new();
+    private LinkedList<int> cookingPlan = new();
+    private Stack<int> removeRecipes = new();
+    private Queue<string> instructionQueue = new();
         
 
     public RecipeManager(IEnumerable<Recipe> recipes)
@@ -109,29 +114,119 @@ public sealed class RecipeManager : IRecipeManager
         shoppingList.Clear();
     }
 
-    public bool AddRecipeToCookingPlan(int recipeId) =>
-        throw new NotImplementedException("Part A: implement AddRecipeToCookingPlan.");
+    public bool AddRecipeToCookingPlan(int recipeId)
+    {
+        if(recipes.ContainsKey (recipeId))
+        {
+            return false;
 
-    public bool RemoveRecipeFromCookingPlan(int recipeId) =>
-        throw new NotImplementedException("Part A: implement RemoveRecipeFromCookingPlan.");
+        }
 
-    public bool RestoreLastRemovedRecipe() =>
-        throw new NotImplementedException("Part A: implement RestoreLastRemovedRecipe.");
+        if (cookingPlan.Contains(recipeId))
+        {
+            return false;
+        }
 
-    public int? PeekLastRemovedRecipe() =>
-        throw new NotImplementedException("Part A: implement PeekLastRemovedRecipe.");
+        cookingPlan.AddLast(recipeId);
+        return true;
+    }
 
-    public IReadOnlyList<int> GetCookingPlan() =>
-        throw new NotImplementedException("Part A: implement GetCookingPlan.");
 
-    public bool StartCooking(int recipeId) =>
-        throw new NotImplementedException("Part A: implement StartCooking.");
+    public bool RemoveRecipeFromCookingPlan(int recipeId)
+    {
 
-    public string? PeekNextInstruction() =>
-        throw new NotImplementedException("Part A: implement PeekNextInstruction.");
+        if (cookingPlan.Contains(recipeId))
+        {
+            return false;
+        }
 
-    public string? CompleteNextInstruction() =>
-        throw new NotImplementedException("Part A: implement CompleteNextInstruction.");
+        cookingPlan.Remove(recipeId);
+        removeRecipes.Push(recipeId);
+        return true;
+    }
+
+    public bool RestoreLastRemovedRecipe()
+    {
+        if (removeRecipes.Count == 0)
+        {
+            return false;
+        }
+
+        int recipeId = removeRecipes.Pop();
+
+        if (recipes.ContainsKey(recipeId))
+        {
+            return false;
+        }
+
+        if (cookingPlan.Contains(recipeId))
+        {
+            return false;
+        }
+
+        cookingPlan.AddLast(recipeId);
+        return true;
+    }
+
+    public int? PeekLastRemovedRecipe()
+    {
+        if (removeRecipes.Count == 0)
+        {
+            return null;
+        }
+
+        return removeRecipes.Peek();
+    }
+
+    public IReadOnlyList<int> GetCookingPlan()
+    {
+        return new List<int>(cookingPlan);
+    }
+
+    public bool StartCooking(int recipeId)
+    {
+        Recipe? recipe = FindRecipe(recipeId);
+
+        if (recipe == null)
+        {
+            return false;
+        }
+        
+        if (recipe.Ingredients.Count == 0)
+        {
+            return false;
+        }
+
+        instructionQueue.Clear();
+
+        foreach (string instruction in recipe.Instructions)
+        {
+            instructionQueue.Enqueue(instruction);
+
+        }
+
+        return true;
+    }
+
+    public string? PeekNextInstruction()
+    {
+        if (instructionQueue.Count == 0)
+        {
+            return null;
+        }
+
+        return instructionQueue.Peek();
+    }
+    public string? CompleteNextInstruction()
+    {
+        if (instructionQueue.Count == 0)
+        {
+            return null;
+        }
+
+        return instructionQueue.Dequeue();
+        
+    }
 
     public IReadOnlyList<Recipe> SearchByTitle(string searchText) =>
         throw new NotImplementedException("Part B: implement SearchByTitle.");
