@@ -24,6 +24,11 @@ public sealed class RecipeManager : IRecipeManager
     {
         // TODO Part A: validate recipes and build Dictionary<int, Recipe>.
 
+        if (recipes == null)
+        {
+            throw new ArgumentNullException("recipes");
+        }
+
         foreach (Recipe recipe in recipes)
         {
             if (recipe.Id <= 0)
@@ -65,7 +70,7 @@ public sealed class RecipeManager : IRecipeManager
                 return false;
             }
 
-            if (recipe.Title == null || recipe.Title == " ")
+            if (string.IsNullOrWhiteSpace(recipe.Title))
             {
                 return false;
             }
@@ -96,17 +101,17 @@ public sealed class RecipeManager : IRecipeManager
     public bool RemoveRecipe(int recipeId)
     {
         if (recipes.ContainsKey(recipeId))
+        {
+            if (cookingPlan.Contains(recipeId))
             {
                 return false;
             }
-        
-        if (cookingPlan.Contains(recipeId))
-        {
-            return false;
-        }
 
             recipes.Remove(recipeId);
             return true;
+        }
+
+        return false;
 
 
     }
@@ -143,17 +148,21 @@ public sealed class RecipeManager : IRecipeManager
     {
         if(recipes.ContainsKey (recipeId))
         {
-            return false;
+            if (cookingPlan.Contains(recipeId))
+            {
+                return false;
+            }
+            else
+            {
+                cookingPlan.AddLast(recipeId);
+                return true;
+            }
 
         }
-
-        if (cookingPlan.Contains(recipeId))
+        else
         {
             return false;
         }
-
-        cookingPlan.AddLast(recipeId);
-        return true;
     }
 
 
@@ -162,12 +171,15 @@ public sealed class RecipeManager : IRecipeManager
 
         if (cookingPlan.Contains(recipeId))
         {
+            cookingPlan.Remove(recipeId);
+            removeRecipes.Push(recipeId);
+            return true;
+        }
+        else
+        {
             return false;
         }
 
-        cookingPlan.Remove(recipeId);
-        removeRecipes.Push(recipeId);
-        return true;
     }
 
     public bool RestoreLastRemovedRecipe()
@@ -179,7 +191,7 @@ public sealed class RecipeManager : IRecipeManager
 
         int recipeId = removeRecipes.Pop();
 
-        if (recipes.ContainsKey(recipeId))
+        if (recipes.ContainsKey(recipeId) == false)
         {
             return false;
         }
