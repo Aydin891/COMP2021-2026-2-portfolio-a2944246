@@ -60,6 +60,42 @@ public sealed class RecipeManagerTests
         Assert.Empty(manager.GetShoppingList());
     }
 
+    [Fact]
+    public void CantAddRecipePlanTwiceTest()
+    {
+        var manager = CreateManager();
+
+        Assert.True(manager.AddRecipeToCookingPlan(10));
+        Assert.False(manager.AddRecipeToCookingPlan(10));
+    }
+
+    [Fact]
+    public void FindRecipeReturnNullForNoRecipe()
+    {
+        var manager = CreateManager();
+
+        Assert.Null(manager.FindRecipe(999));
+    }
+
+    [Fact]
+    public void LastRemoveRecipePeek()
+    {
+         var manager = CreateManager();
+
+        Assert.Null(manager.PeekLastRemovedRecipe());
+    }
+
+    [Fact]
+    public void AddRecipeReturnFalseDublicatedIdTest()
+    {
+        var manager = CreateManager();
+        Recipe recipe = new Recipe { Id = 10, Title = "Another Recipe"};
+
+        Assert.False(manager.AddRecipe(recipe));
+
+
+    }
+
     private static RecipeManager CreateManager()
     {
         return new RecipeManager(new[]
