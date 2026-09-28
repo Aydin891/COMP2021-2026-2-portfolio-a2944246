@@ -26,16 +26,31 @@ public sealed class RecipeManager : IRecipeManager
 
         foreach (Recipe recipe in recipes)
         {
-            AddRecipe(recipe);
+            if (recipe.Id <= 0)
+            {
+                throw new ArgumentException("ID of the recipe must be positive.");
+            }
+            
+            if (string.IsNullOrWhiteSpace(recipe.Title))
+            {
+                throw new ArgumentException("Title of the recipe cant be blank.");
+            }
+
+            if (this.recipes.ContainsKey(recipe.Id))
+            {
+                throw new ArgumentException("Duplicate recipe ID.");
+            }
+
+            this.recipes.Add(recipe.Id, recipe);
         }
 
     }
 
-    public int RecipeCount => 0;
-    public int ShoppingItemCount => 0;
-    public int CookingPlanCount => 0;
-    public int PendingInstructionCount => 0;
-    public int RemovedRecipeCount => 0;
+    public int RecipeCount => recipes.Count;
+    public int ShoppingItemCount => shoppingList.Count;
+    public int CookingPlanCount => cookingPlan.Count;
+    public int PendingInstructionCount => instructionQueue.Count;
+    public int RemovedRecipeCount => removeRecipes.Count;
 
     public bool AddRecipe(Recipe recipe)
     
@@ -46,6 +61,11 @@ public sealed class RecipeManager : IRecipeManager
             }
 
             if (recipe.Id <=0)
+            {
+                return false;
+            }
+
+            if (recipe.Title == null || recipe.Title == " ")
             {
                 return false;
             }
@@ -75,13 +95,18 @@ public sealed class RecipeManager : IRecipeManager
 
     public bool RemoveRecipe(int recipeId)
     {
-        if(recipes.ContainsKey(recipeId))
+        if (recipes.ContainsKey(recipeId))
             {
-                recipes.Remove(recipeId);
-                return true;
+                return false;
             }
-
+        
+        if (cookingPlan.Contains(recipeId))
+        {
             return false;
+        }
+
+            recipes.Remove(recipeId);
+            return true;
 
 
     }
@@ -106,7 +131,7 @@ public sealed class RecipeManager : IRecipeManager
 
     public IReadOnlyList<string> GetShoppingList()
     {
-        return shoppingList;
+        return new List<string>(shoppingList);
     }
 
     public void ClearShoppingList()
@@ -192,7 +217,7 @@ public sealed class RecipeManager : IRecipeManager
             return false;
         }
         
-        if (recipe.Ingredients.Count == 0)
+        if (recipe.Instructions.Count == 0)
         {
             return false;
         }
