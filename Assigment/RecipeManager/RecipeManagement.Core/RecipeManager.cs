@@ -265,6 +265,8 @@ public sealed class RecipeManager : IRecipeManager
         
     }
 
+    
+
     public IReadOnlyList<Recipe> SearchByTitle(string searchText) =>
         throw new NotImplementedException("Part B: implement SearchByTitle.");
 

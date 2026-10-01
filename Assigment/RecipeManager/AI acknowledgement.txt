@@ -1,0 +1,5 @@
+AI acknowledgement
+
+I used LLM Model (ChatGPT) to understand the Part A of the assigments requrements and learn about the collections.
+Used it to understand the errors that Visual Studio is displaying.I did not copy or adapted the AI generated code in mu submission.
+I developed the submitted solution myself based on my inderstanding of the course materials.
