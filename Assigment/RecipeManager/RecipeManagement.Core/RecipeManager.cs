@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
+using System.Linq;
 
 namespace RecipeManagement.Core;
 
@@ -267,8 +268,26 @@ public sealed class RecipeManager : IRecipeManager
 
     
 
-    public IReadOnlyList<Recipe> SearchByTitle(string searchText) =>
-        throw new NotImplementedException("Part B: implement SearchByTitle.");
+    public IReadOnlyList<Recipe> SearchByTitle(string searchText)
+    {
+        if (searchText == "")
+        {
+            return recipes.Values.ToList();
+        }
+
+        string search = searchText.ToLower();
+
+        var result = from recipe in recipes.Values where recipe.Title.ToLower().Contains(search) select recipe;
+
+        if (result.Count == 0)
+        {
+            Console.WriteLine("No recipes ha been found");
+        }
+
+        return result.ToList();
+
+    }
+
 
     public IReadOnlyList<Recipe> SearchByIngredient(string searchText) =>
         throw new NotImplementedException("Part B: implement SearchByIngredient.");
