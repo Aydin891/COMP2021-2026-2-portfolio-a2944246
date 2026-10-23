@@ -279,7 +279,7 @@ public sealed class RecipeManager : IRecipeManager
 
         var result = from recipe in recipes.Values where recipe.Title.ToLower().Contains(search) select recipe;
 
-        if (result.Count == 0)
+        if (result.Count() == 0)
         {
             Console.WriteLine("No recipes ha been found");
         }
@@ -289,12 +289,39 @@ public sealed class RecipeManager : IRecipeManager
     }
 
 
-    public IReadOnlyList<Recipe> SearchByIngredient(string searchText) =>
-        throw new NotImplementedException("Part B: implement SearchByIngredient.");
+    public IReadOnlyList<Recipe> SearchByIngredient(string searchText)
+    {
+        if (searchText == "")
+        {
+            return recipes.Values.ToList();
+        }
 
-    public IReadOnlyList<Recipe> GetHighestProteinRecipes(int count) =>
-        throw new NotImplementedException("Part B: implement GetHighestProteinRecipes.");
+        string search = searchText.ToLower();
 
+        var result = from recipe in recipes.Values where recipe.Ingredients.Any(ingredient => ingredient.ToLower().Contains(search)) select recipe;
+
+        if (result.Count() == 0)
+        {
+            Console.WriteLine("No recipes ha been found");
+        }
+
+        return result.ToList();
+    }
+
+    public IReadOnlyList<Recipe> GetHighestProteinRecipes(int count)
+    {
+        if (count <= 0)
+        {
+            return new List<Recipe>();
+        }
+
+        var result = from recipe in recipes.Values 
+                    where recipe.Nutrition != null && recipe.Nutrition.ProteinG != null
+                    orderby recipe.Nutrition.ProteinG descending
+                    select recipe;
+        
+        return result.Take(count).ToList();
+    }
     public bool AddSavedRecipe(int recipeId) =>
         throw new NotImplementedException("Part B: implement AddSavedRecipe.");
 
