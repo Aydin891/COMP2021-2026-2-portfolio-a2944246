@@ -19,6 +19,7 @@ public sealed class RecipeManager : IRecipeManager
     private LinkedList<int> cookingPlan = new();
     private Stack<int> removeRecipes = new();
     private Queue<string> instructionQueue = new();
+    private List<int> savedReciepes = new();
         
 
     public RecipeManager(IEnumerable<Recipe> recipes)
@@ -322,16 +323,56 @@ public sealed class RecipeManager : IRecipeManager
         
         return result.Take(count).ToList();
     }
-    public bool AddSavedRecipe(int recipeId) =>
-        throw new NotImplementedException("Part B: implement AddSavedRecipe.");
+    public bool AddSavedRecipe(int recipeId)
+    {
+        // if recipe does not exist
+        if (recipes.ContainsKey(recipeId) ==false)
+        {
+            return false;
+        }
+        //else if recipe is already been saved
+        else if (savedReciepes.Contains(recipeId))
+        {
 
-    public bool RemoveSavedRecipe(int recipeId) =>
-        throw new NotImplementedException("Part B: implement RemoveSavedRecipe.");
+            return false;
+        }
+        else
+        {    
+            savedReciepes.Add(recipeId);
+            return true;
+        }
 
-    public bool IsRecipeSaved(int recipeId) =>
-        throw new NotImplementedException("Part B: implement IsRecipeSaved.");
+    }
 
-    public IReadOnlyList<int> GetSavedRecipes() =>
-        throw new NotImplementedException("Part B: implement GetSavedRecipes.");
+    public bool RemoveSavedRecipe(int recipeId)
+    {
+        if (savedReciepes.Contains(recipeId))
+        {
+            savedReciepes.Remove(recipeId);
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("The recipe is not saved");
+            return false;
+        }
+    }
+
+    public bool IsRecipeSaved(int recipeId)
+    {
+        if (savedReciepes.Contains(recipeId))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public IReadOnlyList<int> GetSavedRecipes()
+    {
+        return savedReciepes();
+    }
 
 }
