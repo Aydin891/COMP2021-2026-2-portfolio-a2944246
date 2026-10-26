@@ -372,7 +372,7 @@ public sealed class RecipeManager : IRecipeManager
 
     public IReadOnlyList<int> GetSavedRecipes()
     {
-        return savedReciepes();
+        return savedReciepes.ToList();
     }
 
 }

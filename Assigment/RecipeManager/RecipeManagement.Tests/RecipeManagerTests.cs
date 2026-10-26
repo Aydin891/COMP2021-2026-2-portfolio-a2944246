@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using RecipeManagement.Core;
 
 namespace RecipeManagement.Tests;
@@ -95,6 +96,68 @@ public sealed class RecipeManagerTests
 
 
     }
+    //Part B - Search by title test 
+    [Fact]
+    public void searchByTitleTest()
+    {
+        var manager = CreateManager();
+        var result = manager.SearchByTitle("recipe a");
+
+        Assert.Single(result);
+        Assert.Equal(10, result[0].Id);
+    }
+    // Part B - Search by ingridient 
+    [Fact]
+    public void searchByIngredientTest()
+    {
+        var manager = CreateManager();
+        var result = manager.SearchByIngredient("APPLE");
+
+        Assert.Single(result);
+        Assert.Equal(10, result[0].Id);
+    }
+    // Part B - Highest protein
+    [Fact]
+    public void highestProteinTest()
+    {
+        var manager = CreateManager();
+        var result = manager.GetHighestProteinRecipes(2);
+
+        Assert.Empty(result);
+    }
+    // Part B - Add saved recipe
+    [Fact]
+    public void addSavedRecipeTest()
+    {
+        var manager = CreateManager();
+
+        Assert.True(manager.AddSavedRecipe(10));
+        Assert.True(manager.IsRecipeSaved(10));
+    }
+    // Part B - Remove saved recipe
+    [Fact]
+    public void removeSavedRecipe()
+    {
+        var manager = CreateManager();
+
+        manager.AddSavedRecipe(10);
+
+        Assert.True(manager.RemoveSavedRecipe(10));
+        Assert.False(manager.IsRecipeSaved(10));
+        Assert.Empty(manager.GetSavedRecipes());
+    }
+    // Part B - Integration Test
+    [Fact]
+public void partBIntegrationTest()
+{
+    var manager = CreateManager();
+    var result = manager.SearchByTitle("Recipe A");
+    
+    Assert.Single(result);
+    Assert.True(manager.AddSavedRecipe(10));
+    Assert.True(manager.AddRecipeToCookingPlan(10));
+    Assert.True(manager.RemoveSavedRecipe(10));
+}
 
     private static RecipeManager CreateManager()
     {
@@ -112,6 +175,7 @@ public sealed class RecipeManagerTests
                 Id = 20,
                 Title = "Recipe B"
             }
+
         });
     }
 }
